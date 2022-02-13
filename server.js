@@ -1,14 +1,14 @@
-const express = require('express');
-const app = express();
+const express = require("express")
+const app = express()
 
-app.set('view engine', 'ejs');
+app.use(express.static("public"))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
-app.get('/', (req, res, next) => {
-    console.log('homepage');
-    res.render("homepage", { text12: "world" });
-});
+app.set("view engine", "ejs")
 
-const userRouter = require('./routes/users');
-app.use('/users', userRouter);
+const userRouter = require("./routes/users")
 
-app.listen(3000);
+app.use("/users", userRouter)
+
+app.listen(3000)
