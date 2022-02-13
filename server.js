@@ -4,8 +4,8 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res, next) => {
-    console.log('here');
-    res.render("index", { text12: "world" });
+    console.log('homepage');
+    res.render("homepage", { text12: "world" });
 });
 
 const userRouter = require('./routes/users');
