@@ -13,11 +13,6 @@
   <title>Document</title>
 </head>
 <body>
-  <form action="/users" method="POST">
-    <label>First Name
-      <input type="text" name="firstName" value="<%= locals.firstName %>" />
-    </label>
-    <button type="submit">Submit</button>
-  </form>
+  <h1>Welcome on your dashboard <%= locals.developer || "Default" %></h1>
 </body>
 </html>
