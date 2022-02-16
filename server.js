@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const express = require("express")
 const axios = require("axios")
 const app = express()
@@ -8,9 +6,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.set("view engine", "ejs")
-
-const token = process.env.TOKEN
-const password = process.env.PASSWORD
 
 app.get('/', (req, res, next) => {
     console.debug("> Homepage");
