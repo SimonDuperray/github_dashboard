@@ -12,7 +12,6 @@ const headers = {
 }
 var DEVELOPER = "";
 var languages_values;
-var languages_keys_buffer;
 const colorsGraph = [
     {
         'bg': 'rgba(156, 163, 214, 0.2)',
@@ -189,6 +188,22 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         }
         borderWidth = 1;
         datag = languages_values;
+
+        // CREATION HOUR
+        months = [
+            '0h->5h',
+            '5h->10h',
+            '10h->15h',
+            '15h->20h',
+            '20h->0h'
+        ]
+        hours = [
+            12,
+            90,
+            45,
+            21,
+            2
+        ]
     }
     param_res.render("users/dashboard", { 
         developer: param_req.params.devId, 
@@ -200,7 +215,10 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         backgroundColor: backgroundColor,
         borderColor: borderColor,
         borderWidth: borderWidth,
-        datag: datag
+        datag: datag,
+
+        months: months,
+        hours: hours
     });
 });
 
