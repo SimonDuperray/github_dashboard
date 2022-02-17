@@ -76,15 +76,9 @@
       </div> 
     </div>
     
-    <canvas id="myChart" width="200" height="50"></canvas>
+    <canvas id="myChart" width="300" height="100"></canvas>
 
-    <canvas id="line" width="200" height="50"></canvas>
-
-    <ul>
-      <% for(var i=0; i<locals.data.length; i++) {%>
-         <li><%= data[i].created_at %></li>
-      <% } %>
-    </ul>
+    <canvas id="line" width="300" height="100"></canvas>
 
   </div>
   <% var labels = locals.labels %>
@@ -93,7 +87,7 @@
   <% var borderWidth = locals.borderWidth %>
   <% var datag = locals.datag %>
 
-  <% var months = locals.months %>
+  <% var created_at_list = locals.created_at_list %>
   <% var hours = locals.hours %>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
@@ -143,10 +137,10 @@
     var lineChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: <%- JSON.stringify(months) %>,
+            labels: <%- JSON.stringify(hours) %>,
             datasets: [{
                 label: 'Repo created at:  ',
-                data: <%- JSON.stringify(hours) %>,
+                data: <%- JSON.stringify(created_at_list) %>,
                 fill: true,
                 backgroundColor: gradient,
                 borderColor: 'rgba(75, 192, 192, 1)',

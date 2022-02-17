@@ -83,6 +83,14 @@ const colorsGraph = [
     }
 ]
 const colorsIndexes = Array.from(Array(colorsGraph.length).keys())
+var created_at = new Array()
+var hours_dict = {
+    '0->5': 0,
+    '5->10': 0,
+    '10->15': 0,
+    '15->20': 0,
+    '20->0': 0,
+}
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -190,20 +198,24 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         datag = languages_values;
 
         // CREATION HOUR
-        months = [
-            '0h->5h',
-            '5h->10h',
-            '10h->15h',
-            '15h->20h',
-            '20h->0h'
-        ]
-        hours = [
-            12,
-            90,
-            45,
-            21,
-            2
-        ]
+        for (var i=0; i<parsed.length; i++) {
+            created_at.push(parsed[i].created_at.slice(11, 13))
+        }
+        created_at.forEach(hour => {
+            let int_hour = parseInt(hour)
+            console.log(`value: ${int_hour} - type: ${typeof(int_hour)}`)
+            if(int_hour>0 && int_hour<5){
+                hours_dict['0->5']+=1
+            } else if(int_hour>=5 && int_hour<10){
+                hours_dict['5->10']+=1
+            } else if(int_hour>=15 && int_hour<20){
+                hours_dict['15->20']+=1
+            } else if(int_hour>=20 && int_hour<25){
+                hours_dict['20->0']+=1
+            }
+        })
+        hours = Object.keys(hours_dict)
+        created_at_list = Object.values(hours_dict)
     }
     param_res.render("users/dashboard", { 
         developer: param_req.params.devId, 
@@ -217,8 +229,8 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         borderWidth: borderWidth,
         datag: datag,
 
-        months: months,
-        hours: hours
+        hours: hours,
+        created_at_list: created_at_list
     });
 });
 
