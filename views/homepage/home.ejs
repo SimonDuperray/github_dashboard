@@ -17,10 +17,18 @@
         ul>li>h2 { font-size: 17px; padding: 0; }
         div.alert.alert-danger { padding: 10px; }
         h2#devI, ul, div.alert.alert-danger { margin: 0; }
+        nav, div.container-fluid { background-color: #5A6583!important; }
+        nav>div>a { color: #fff; }
+        nav>div>a:hover { color: #141A32; text-decoration: none; }
         </style>
   <title>Homepage</title>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Hello <%= locals.developer || "Developer" %></a>
+        </div>
+      </nav>
     <div class="container">
         <h1 class="display-5">Welcome on GHD web app</h1>
         <form action="/" method="POST">

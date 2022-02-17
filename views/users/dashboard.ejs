@@ -21,18 +21,19 @@
     div.d { float: left; }
     ul>li { color: #fff; }
     canvas { padding: 20px; border: 1px solid #fff; border-radius: 10px; }
+    nav, div.container-fluid { background-color: #5A6583!important; }
+    nav>div>a { color: #fff; }
+    nav>div>a:hover { color: #141A32; text-decoration: none; }
   </style>
   <title>Dashboard</title>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Hello <%= locals.developer || "Default" %></a>
+    </div>
+  </nav>
   <div class="container">
-    <header>
-      <h1 class="display-5">Welcome on your dashboard <%= locals.developer || "Default" %></h1>
-      <button class="btn btn-primary">
-        <a href="/">Go Back</a>
-      </button> 
-    </header>
-    
     <div class="cards-container">
       <div class="d">
         <div class="card" style="width: 18rem;">
