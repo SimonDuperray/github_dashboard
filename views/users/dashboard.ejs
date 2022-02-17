@@ -8,20 +8,113 @@
   <style>
     body {
         background-color: #141A32;
-        color: #fff;
     }
+    div.card { margin: 15px; }
+    h1.display-5 { color: #fff; }
+    div.cards-container { display: flex; justify-content: space-between;  }
+    p#nbRepos { font-weight: bold; color: orange; font-size: 50px; }
+    p#repoSize { font-weight: bold; color: green; font-size: 50px; }
+    p#nbCommits { font-weight: bold; color: blue; font-size: 50px; }
+    p#another { font-weight: bold; color: red; font-size: 50px; }
     button>a { color: inherit; text-decoration: none; }
     button>a:hover { color: #fff; }
+    div.d { float: left; }
+    ul>li { color: #fff; }
+    canvas { padding: 20px; border: 1px solid #fff; border-radius: 10px; }
   </style>
   <title>Dashboard</title>
 </head>
 <body>
   <div class="container">
-    <h1 class="display-5">Welcome on your dashboard <%= locals.developer || "Default" %></h1>
-    <button class="btn btn-primary">
-      <a href="/">Go Back</a>
-    </button>  
+    <header>
+      <h1 class="display-5">Welcome on your dashboard <%= locals.developer || "Default" %></h1>
+      <button class="btn btn-primary">
+        <a href="/">Go Back</a>
+      </button> 
+    </header>
+    
+    <div class="cards-container">
+      <div class="d">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Number of repositories</h5>
+            <p id="nbRepos" class="card-text"><%= locals.data.length || 0 %></p>
+          </div>
+        </div>
+      </div>
+      <div class="d">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Repositoriy average size</h5>
+            <p id="repoSize" class="card-text"><%= locals.avg_size || 0 %> MB</p>
+          </div>
+        </div>
+      </div> 
+      <div class="d">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Commits per repository</h5>
+            <p id="nbCommits" class="card-text"><%= locals.avg_commits || 0 %></p>
+          </div>
+        </div>
+      </div>
+      <div class="d">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Another info</h5>
+            <p id="another" class="card-text"><%= locals.another_info || 0 %></p>
+          </div>
+        </div>
+      </div> 
+    </div>
+    
+    <canvas id="myChart" width="200" height="50"></canvas>
+
   </div>
+  <% var labels = locals.labels %>
+  <% var backgroundColor = locals.backgroundColor %>
+  <% var labelborderColors = locals.borderColor %>
+  <% var borderWidth = locals.borderWidth %>
+  <% var datag = locals.datag %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <%- JSON.stringify(labels) %>,
+            datasets: [{
+                label: 'This language was used: ',
+                data: <%- JSON.stringify(datag) %>,
+                backgroundColor: <%- JSON.stringify(backgroundColor) %>,
+                borderColor: <%- JSON.stringify(borderColor) %>,
+                borderWidth: <%- JSON.stringify(borderWidth) %>,
+            }]
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: 'LANGUAGES REPARTITION FOR GITHUB PROJECTS',
+              padding: {
+                top: 10,
+                bottom: 10
+              },
+              color: '#D2D2D7',
+              font: { 
+                weight: 'bold',
+                size: 20
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        },
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </body>
 </html>
