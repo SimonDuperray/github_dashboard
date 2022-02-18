@@ -124,7 +124,7 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
     var avg_commits;
     const devId = param_req.params.devId
     console.log(param_req.params)
-    console.log(`The followinf request will be sent: https://api.github.com/users/${ param_req.params.devId }/repos`)
+    console.log(`The following request will be sent: https://api.github.com/users/${ param_req.params.devId }/repos`)
     if(DEVELOPER!=""){
         // axios.get(`https://api.github.com/users/${ DEVELOPER }/repos`).then(response => {
         //     console.log(response.status)
@@ -203,7 +203,7 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         }
         created_at.forEach(hour => {
             let int_hour = parseInt(hour)
-            console.log(`value: ${int_hour} - type: ${typeof(int_hour)}`)
+            // console.log(`value: ${int_hour} - type: ${typeof(int_hour)}`)
             if(int_hour>0 && int_hour<5){
                 hours_dict['0->5']+=1
             } else if(int_hour>=5 && int_hour<10){

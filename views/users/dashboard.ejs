@@ -6,82 +6,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body { background-color: #141A32; }
-    div.card { margin: 15px; }
+    div.container { height: 100vh; width: 100vw; }
+    div.card { margin: 15px; width: 15vw!important; }
     p.display-5 { color: #fff; margin-top: 10px; }
+    div.card-body { padding: 14px!important; }
     div.cards-container { 
       display: flex; 
-      height: auto;
-      justify-content: center; 
-      padding: 20px; 
-      border: 1px solid #5A6583;
-      background-color: #5A6583; 
+      justify-content: space-around; 
+      padding: 10px 0; 
+      overflow: visible;
       margin-bottom: 20px; 
       border-radius: 10px;
+      margin: 0 5px!important;
     }
+    h5.card-title { font-size: 1.5vw }
+    p.card-text { font-size: 2vw!important; }
     p#nbRepos { font-weight: bold; color: rgba(241, 112, 95, 1); font-size: 50px; }
     p#repoSize { font-weight: bold; color: rgba(243, 189, 106, 1); font-size: 50px; }
     p#nbCommits { font-weight: bold; color: rgba(207, 146, 211, 1); font-size: 50px; }
     p#another { font-weight: bold; color: rgba(106, 117, 186, 1); font-size: 50px; }
     button>a { color: inherit; text-decoration: none; }
     button>a:hover { color: #fff; }
-    div.d { float: left; }
     ul>li { color: #fff; }
-    canvas { padding: 20px; margin: 15px; border: 1px solid #fff; border-radius: 10px; }
+    canvas { padding: 20px; margin: 15px 0; border: 1px solid #fff; border-radius: 10px; }
     nav, div.container-fluid { background-color: #5A6583!important; }
     nav>div>a { color: #fff; }
     nav>div>a:hover { color: #141A32; text-decoration: none; }
+    a.nav-link { color: #fff; font-size: 1vw; }
+    a.nav-link:hover { color: #141A32; text-decoration: none; }
+    footer { height: 8vh; background-color: #5A6583; display: flex; justify-content: center; align-items: center; color: #141A32; }
+    a.footer-link { color: #141A32; text-decoration: none; font-weight: bold; font-style: italic; }
+    a.footer-link:hover { text-decoration: underline; }
   </style>
   <title>Dashboard</title>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Hello <%= locals.developer || "Default" %></a>
-    </div>
-  </nav>
+  <nav class="navbar navbar-expand-sm">
+	  <div class="container-fluid ">
+		<a class="navbar-brand " href="/">GHD</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+		  <ul class="navbar-nav ">
+			<li class="nav-item">
+			  <a class="nav-link active" aria-current="page" href="#">Hello <%= locals.developer || "Error" %></a>
+			</li>		
+		  </ul>		  
+		</div>
+	  </div>
+	</nav>
+
   <div class="container">
     <p class="display-5">Welcome on your Github Dashboard !</p>
-    <div class="cards-container">
-      <div class="d">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">Number of repositories</h5>
-            <p id="nbRepos" class="card-text"><%= locals.data.length || 0 %></p>
+    <div class="row">
+      <div class="cards-container">
+        <div class="d">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Number of repositories</h5>
+              <p id="nbRepos" class="card-text"><%= locals.data.length || 0 %></p>
+            </div>
+          </div>
+        </div>
+        <div class="d">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Repositoriy average size</h5>
+              <p id="repoSize" class="card-text"><%= locals.avg_size || 0 %> MB</p>
+            </div>
+          </div>
+        </div> 
+        <div class="d">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Commits per repository</h5>
+              <p id="nbCommits" class="card-text"><%= locals.avg_commits || 0 %></p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="d">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">Repositoriy average size</h5>
-            <p id="repoSize" class="card-text"><%= locals.avg_size || 0 %> MB</p>
-          </div>
-        </div>
-      </div> 
-      <div class="d">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">Commits per repository</h5>
-            <p id="nbCommits" class="card-text"><%= locals.avg_commits || 0 %></p>
-          </div>
-        </div>
-      </div>
-      <div class="d">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">Another info</h5>
-            <p id="another" class="card-text"><%= locals.another_info || 0 %></p>
-          </div>
-        </div>
-      </div> 
     </div>
     
-    <canvas id="myChart" width="300" height="100"></canvas>
+    <canvas id="bar"></canvas>
 
-    <canvas id="line" width="300" height="100"></canvas>
+    <canvas id="line"></canvas>
+
+    <footer>
+      <div>
+        © 2022 Copyright:
+        <a class="footer-link" target="_blank" href="https://github.com/SimonDuperray">Simon Duperray</a>
+      </div>
+    </footer>
 
   </div>
+  
   <% var labels = locals.labels %>
   <% var backgroundColor = locals.backgroundColor %>
   <% var labelborderColors = locals.borderColor %>
@@ -93,8 +118,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     // bar chart
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    var ctx = document.getElementById('bar').getContext('2d');
+    var bar = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: <%- JSON.stringify(labels) %>,
@@ -107,6 +132,9 @@
             }]
         },
         options: {
+          maintainAspectRatio: true,
+          responsive: true,
+          aspectRatio: 2,
           plugins: {
             title: {
               display: true,
@@ -149,6 +177,9 @@
             }]
         },
         options: {
+          maintainAspectRatio: true,
+          responsive: true,
+          aspectRatio: 2,
           plugins: {
             title: {
               display: true,
