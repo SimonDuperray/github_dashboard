@@ -91,6 +91,7 @@ var hours_dict = {
     '15->20': 0,
     '20->0': 0,
 }
+var freq_repos=0;
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -216,12 +217,35 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         })
         hours = Object.keys(hours_dict)
         created_at_list = Object.values(hours_dict)
+
+        // repository init frequency
+        let creation_date = new Array()
+        for (var i=0; i<parsed.length; i++) {
+            creation_date.push(new Date(parsed[i].created_at))
+        }
+        creation_date.sort((date1, date2) => date1-date2)
+        console.log(creation_date)
+        let gaps = new Array();
+        for (var i=0; i<creation_date.length; i++) {
+            if(i==creation_date.length-1){
+                break
+            } else {
+                let gap = parseInt(Number((creation_date[i+1]-creation_date[i])/(1000*3600*24)).toFixed(0))
+                gaps.push(gap)
+            }
+        }
+        console.log(gaps)
+        let sum_freq=gaps.reduce((a, b) => a+b, 0)
+        freq_repo = (sum_freq/gaps.length) || 0;
+        freq_repo = parseInt(Number((freq_repo).toFixed(0)))
+        
     }
     param_res.render("users/dashboard", { 
         developer: param_req.params.devId, 
         data: parsed, 
         avg_size: avg_size,
         avg_commits: avg_commits,
+        freq_repo: freq_repo,
 
         labels: labels,
         backgroundColor: backgroundColor,
