@@ -108,10 +108,13 @@
 		  <span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-		  <ul class="navbar-nav ">
-			<li class="nav-item">
-			  <a class="nav-link active" aria-current="page" href="#">Hello <%= locals.developer || "Error" %></a>
-			</li>		
+		  <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Hello <%= locals.developer || "Error" %></a>
+        </li>		
+        <li class="nav-item">
+          <img class="rounded-circle" width="40" height="40" src="<%= locals.avatar_link%>" alt="Github avatar">
+        </li>
 		  </ul>		  
 		</div>
 	  </div>
@@ -169,7 +172,7 @@
 
   <% var created_at_list = locals.created_at_list %>
   <% var hours = locals.hours %>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     // bar chart

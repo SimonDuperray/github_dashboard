@@ -99,6 +99,7 @@ var datag;
 var hours;
 var created_at_list;
 var RESPONSE = new Array();
+var avatar_link;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -117,6 +118,7 @@ app.post("/", (req, res, next) => {
         console.log(response.status);
         if(response.status==200){
             ID = response.data.id;
+            avatar_link = response.data.avatar_url
             console.log(`> dev ${req.body.devId} has the following github id: ${ ID }`);
             DEVELOPER = req.body.devId;
             res.redirect(`/dev/${ req.body.devId }`);
@@ -241,6 +243,8 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
             avg_size: avg_size,
             avg_commits: avg_commits,
             freq_repo: freq_repo,
+
+            avatar_link: avatar_link,
     
             labels: labels,
             backgroundColor: backgroundColor,
