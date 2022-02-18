@@ -91,7 +91,13 @@ var hours_dict = {
     '15->20': 0,
     '20->0': 0,
 }
-var freq_repos=0;
+var labels;
+var backgroundColor;
+var borderColor;
+var borderWidth
+var datag;
+var hours;
+var created_at_list;
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -114,8 +120,7 @@ app.post("/", (req, res, next) => {
         }
     }).catch(error => {
         console.error("> Error detected during the request")
-        res.redirect("/dev/SimonDuperray")
-        // res.render('homepage/home', { isUserExists: false, developer: req.body.devId })
+        res.render('homepage/home', { isUserExists: false, developer: req.body.devId })
     })
 });
 
@@ -123,56 +128,43 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
     var RESPONSE = new Array();
     var avg_size;
     var avg_commits;
-    const devId = param_req.params.devId
+    var freq_repo=0;
+    
+    var sizes;
+    var sum;
+    var languages;
+    var languages_counted;
+    var borderColor;
+    var creation_date;
+    var gaps;
+    var sum_freq;
+
     console.log(param_req.params)
     console.log(`The following request will be sent: https://api.github.com/users/${ param_req.params.devId }/repos`)
-    if(DEVELOPER!=""){
-        // axios.get(`https://api.github.com/users/${ DEVELOPER }/repos`).then(response => {
-        //     console.log(response.status)
-        //     RESPONSE = response.data
-        //     console.log(RESPONSE)
+    console.log(`DEVELOPER: ${ DEVELOPER }`)
+  
+    axios.get(`https://api.github.com/users/${ DEVELOPER }/repos`).then(response => {
+        console.log(`> response status for user repos: ${ response.status }`)
+        RESPONSE = response.data
+        console.log(`> response length: ${ RESPONSE.length }`)
 
-            // write response.data in json file
-            // let data = JSON.stringify(response.data, 4)
-            // fs.writeFileSync('./data.json', data)
-            // console.debug("> JSON file printed")
 
-            // parse json file
-            // console.log(`There are ${RESPONSE.length} repos`)
-            // console.log(typeof(RESPONSE))
-            // console.log(Object.entries(RESPONSE)[0])
-        // })
-    } else {
-        console.error("> DEVELOPER IS EMPTY")
-        var reader = fs.readFileSync('./data.json')
-        var parsed = JSON.parse(reader)
 
         // REPOS SIZES
-        var sizes = new Array()
-        for (var i = 0; i < parsed.length; i++) {
-            sizes.push(parsed[i].size)
+        sizes = new Array()
+        for (var i = 0; i < RESPONSE.length; i++) {
+            sizes.push(RESPONSE[i].size)
         }
-        const sum = sizes.reduce((a, b) => a+b, 0)
+        sum = sizes.reduce((a, b) => a+b, 0)
         avg_size = Number(((sum / sizes.length)/1000).toFixed(1)) || 0;
-        console.log(sizes)
-
-        // NUMBER OF COMMITS PER REPOSITORY
-        // nb_commits = new Array()
-        // for (var i=0; i<parsed.length; i++){
-        //     console.log(`-> https://api.github.com/repos/${param_req.params.devId}/${parsed[i].name}/commits`)
-        //     axios.get(`https://api.github.com/repos/${param_req.params.devId}/${parsed[i].name}/commits`).then(response => {
-        //         nb_commits.push(response.data.length)
-        //     })
-        // }
-        // var sum_commits = nb_commits.reduce((a, b) => a+b, 0)
-        // avg_commits = (sum_commits / nb_commits.length) || 0;
+        console.log(`> sizes repos: ${ sizes }`)
 
         // LANGUAGES
-        var languages = new Array();
-        for (var i=0; i<parsed.length; i++) {
-            languages.push(parsed[i].language)
+        languages = new Array();
+        for (var i=0; i<RESPONSE.length; i++) {
+            languages.push(RESPONSE[i].language)
         }
-        const languages_counted = {}
+        languages_counted = {}
         for (const element of languages) {
             if(languages_counted[element]) {
                 languages_counted[element]+=1
@@ -189,8 +181,8 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
                 colorsIndexes[Math.floor(Math.random()*colorsIndexes.length)]
             )
         }
-        var backgroundColor = new Array();
-        var borderColor = new Array();
+        backgroundColor = new Array();
+        borderColor = new Array();
         for (var colorToAppend=0; colorToAppend<indexes.length; colorToAppend++) {
             backgroundColor.push(colorsGraph[colorToAppend].bg)
             borderColor.push(colorsGraph[colorToAppend].border)
@@ -199,8 +191,8 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         datag = languages_values;
 
         // CREATION HOUR
-        for (var i=0; i<parsed.length; i++) {
-            created_at.push(parsed[i].created_at.slice(11, 13))
+        for (var i=0; i<RESPONSE.length; i++) {
+            created_at.push(RESPONSE[i].created_at.slice(11, 13))
         }
         created_at.forEach(hour => {
             let int_hour = parseInt(hour)
@@ -218,14 +210,14 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
         hours = Object.keys(hours_dict)
         created_at_list = Object.values(hours_dict)
 
-        // repository init frequency
-        let creation_date = new Array()
-        for (var i=0; i<parsed.length; i++) {
-            creation_date.push(new Date(parsed[i].created_at))
+        // REPO INIT FREQUENCY
+        creation_date = new Array()
+        for (var i=0; i<RESPONSE.length; i++) {
+            creation_date.push(new Date(RESPONSE[i].created_at))
         }
         creation_date.sort((date1, date2) => date1-date2)
-        console.log(creation_date)
-        let gaps = new Array();
+        console.log(`> creation dates: ${ creation_date }`)
+        gaps = new Array();
         for (var i=0; i<creation_date.length; i++) {
             if(i==creation_date.length-1){
                 break
@@ -234,28 +226,28 @@ app.get("/dev/:devId", (param_req, param_res, next) => {
                 gaps.push(gap)
             }
         }
-        console.log(gaps)
-        let sum_freq=gaps.reduce((a, b) => a+b, 0)
+        console.log(`> gaps: ${ gaps }`)
+        sum_freq=gaps.reduce((a, b) => a+b, 0)
         freq_repo = (sum_freq/gaps.length) || 0;
         freq_repo = parseInt(Number((freq_repo).toFixed(0)))
-        
-    }
-    param_res.render("users/dashboard", { 
-        developer: param_req.params.devId, 
-        data: parsed, 
-        avg_size: avg_size,
-        avg_commits: avg_commits,
-        freq_repo: freq_repo,
 
-        labels: labels,
-        backgroundColor: backgroundColor,
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        datag: datag,
-
-        hours: hours,
-        created_at_list: created_at_list
-    });
+        param_res.render("users/dashboard", { 
+            developer: param_req.params.devId, 
+            data: RESPONSE, 
+            avg_size: avg_size,
+            avg_commits: avg_commits,
+            freq_repo: freq_repo,
+    
+            labels: labels,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            borderWidth: borderWidth,
+            datag: datag,
+    
+            hours: hours,
+            created_at_list: created_at_list
+        });
+    })
 });
 
 app.listen(3000)
