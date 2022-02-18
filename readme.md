@@ -13,9 +13,12 @@ This web app uses Javascript Node server and express service for creating the se
 This first version of the project will provide some statistics of Github developers. Each developer will be able to add its username to the homepage form. After that, the user will be redirected to its custom dashboard with some basics stats about its projects and its code habits.
 
 The v1 will provide following features:
-- Pie representation of most currently used languages and technologies
 - Number of public repositories
-- Commit / Pull Requests / Push / Branch / Fork frequency/stats for each repository
+- Average size of public repositories
+- Repository initialization frequency
+- Bar chart of used languages
+- Line chart representing creation hour of repositories
+- (maybe PR infos)
 
 ## In the future
 
